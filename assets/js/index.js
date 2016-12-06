@@ -10,7 +10,7 @@
   const getArtistInfo = function(concert) {
     const $xhr = $.ajax({
       method: 'GET',
-      url: `https://api.spotify.com/v1/search?q=${concert.artistName}&type=Artist`,
+      url: `https://api.spotify.com/v1/search?q=${concert.artist.name}&type=Artist`,
       dataType: 'json'
     });
 
@@ -23,10 +23,16 @@
         return;
       }
 
-      concert.artistID = data.artists.items[0].id;
-      concert.artistImg = data.artists.items[0].images[0].url;
+      concert.artist.id = data.artists.items[0].id;
 
-      console.log(concert);
+      if (data.artists.items[0].images.length === 0) {
+        concert.artist.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+      }
+      else {
+        concert.artist.image = data.artists.items[0].images[0].url;
+      }
+
+      getArtistTopTrack(concert);
     });
 
     $xhr.fail((err) => {
@@ -58,7 +64,9 @@
         const concert = {
           url: result.url,
           date: concertDate,
-          artistName: result.artists[0].name,
+          artist: {
+            name: result.artists[0].name
+          },
           venue: {
             name: result.venue.name,
             city: result.venue.city,
