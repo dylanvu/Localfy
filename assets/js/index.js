@@ -7,6 +7,10 @@
 
   const concerts = [];
 
+  const renderConcerts = function(arr) {
+    console.log(arr);
+  };
+
   const getArtistTopTrack = function(concert) {
     if (concert.artist.id === null) {
       concert.track = null;
@@ -39,6 +43,10 @@
       }
 
       concerts.push(concert);
+    });
+
+    $xhr.fail((err) => {
+      console.log(err);
     });
   };
 
@@ -115,7 +123,7 @@
         getArtistInfo(concert);
       }
 
-      console.log(concerts);
+      renderConcerts(concerts);
       concerts.length = 0;
     });
 
