@@ -8,6 +8,13 @@
   const concerts = [];
 
   const getArtistTopTrack = function(concert) {
+    if (concert.artist.id === null) {
+      concert.track = null;
+      concerts.push(concert);
+
+      return;
+    }
+
     const $xhr = $.ajax({
       method: 'GET',
       url: `https://api.spotify.com/v1/artists/${concert.artist.id}/top-tracks?country=US`,
@@ -19,12 +26,17 @@
         return;
       }
 
-      concert.track = {
-        artist: data.tracks[0].artists[0].name,
-        album: data.tracks[0].album.name,
-        trackName: data.tracks[0].name,
-        preview: data.tracks[0].preview_url
-      };
+      if (data.tracks.length === 0) {
+        concert.track = null;
+      }
+      else {
+        concert.track = {
+          artist: data.tracks[0].artists[0].name,
+          album: data.tracks[0].album.name,
+          trackName: data.tracks[0].name,
+          preview: data.tracks[0].preview_url
+        };
+      }
 
       concerts.push(concert);
     });
@@ -43,16 +55,18 @@
       }
 
       if (data.artists.items.length === 0) {
-        return;
-      }
-
-      concert.artist.id = data.artists.items[0].id;
-
-      if (data.artists.items[0].images.length === 0) {
+        concert.artist.id = null;
         concert.artist.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
       }
       else {
-        concert.artist.image = data.artists.items[0].images[0].url;
+        concert.artist.id = data.artists.items[0].id;
+
+        if (data.artists.items[0].images.length === 0) {
+          concert.artist.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+        }
+        else {
+          concert.artist.image = data.artists.items[0].images[0].url;
+        }
       }
 
       getArtistTopTrack(concert);
@@ -100,6 +114,7 @@
 
         getArtistInfo(concert);
       }
+
       console.log(concerts);
       concerts.length = 0;
     });
