@@ -7,6 +7,29 @@
 
   const concerts = [];
 
+  const getArtistTopTrack = function(concert) {
+    const $xhr = $.ajax({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/artists/${concert.artist.id}/top-tracks?country=US`,
+      dataType: 'json'
+    });
+
+    $xhr.done((data) => {
+      if ($xhr.status !== 200) {
+        return;
+      }
+
+      concert.track = {
+        artist: data.tracks[0].artists[0].name,
+        album: data.tracks[0].album.name,
+        trackName: data.tracks[0].name,
+        preview: data.tracks[0].preview_url
+      };
+
+      concerts.push(concert);
+    });
+  };
+
   const getArtistInfo = function(concert) {
     const $xhr = $.ajax({
       method: 'GET',
@@ -77,7 +100,7 @@
 
         getArtistInfo(concert);
       }
-
+      console.log(concerts);
       concerts.length = 0;
     });
 
