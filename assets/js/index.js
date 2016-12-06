@@ -10,7 +10,7 @@
   const getArtistInfo = function(concert) {
     const $xhr = $.ajax({
       method: 'GET',
-      url: `https://api.spotify.com/v1/search?q=${concert.artist}&type=Album`,
+      url: `https://api.spotify.com/v1/search?q=${concert.artistName}&type=Artist`,
       dataType: 'json'
     });
 
@@ -19,11 +19,18 @@
         return;
       }
 
-      if (data.albums.items.length === 0) {
+      if (data.artists.items.length === 0) {
         return;
       }
 
-      console.log(data);
+      concert.artistID = data.artists.items[0].id;
+      concert.artistImg = data.artists.items[0].images[0].url;
+
+      console.log(concert);
+    });
+
+    $xhr.fail((err) => {
+      console.log(err);
     });
   };
 
@@ -51,7 +58,7 @@
         const concert = {
           url: result.url,
           date: concertDate,
-          artist: result.artists[0].name,
+          artistName: result.artists[0].name,
           venue: {
             name: result.venue.name,
             city: result.venue.city,
@@ -62,6 +69,8 @@
 
         getArtistInfo(concert);
       }
+
+      concerts.length = 0;
     });
 
     $xhr.fail((err) => {
