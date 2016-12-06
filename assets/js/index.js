@@ -5,6 +5,28 @@
 
   // $('select').material_select();
 
+  const concerts = [];
+
+  const getArtistInfo = function(concert) {
+    const $xhr = $.ajax({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/search?q=${concert.artist}&type=Album`,
+      dataType: 'json'
+    });
+
+    $xhr.done((data) => {
+      if ($xhr.status !== 200) {
+        return;
+      }
+
+      if (data.albums.items.length === 0) {
+        return;
+      }
+
+      console.log(data);
+    });
+  };
+
   const getConcerts = function(city) {
     const $xhr = $.ajax({
       method: 'GET',
@@ -23,13 +45,13 @@
         const concertDate = new Date(result.datetime);
 
         if (currentDate.getDate() !== concertDate.getDate()) {
-          return;
+          continue;
         }
 
         const concert = {
           url: result.url,
           date: concertDate,
-          artist: result.artists[0],
+          artist: result.artists[0].name,
           venue: {
             name: result.venue.name,
             city: result.venue.city,
@@ -47,7 +69,15 @@
     });
   };
 
-  $('form').on('submit', () => {
-    getConcerts($('#location').val());
+  $('form').on('submit', (event) => {
+    event.preventDefault();
+
+    const searchQuery = $('#location').val();
+
+    if (searchQuery.trim() === '') {
+      return;
+    }
+
+    getConcerts(searchQuery);
   });
 })();
