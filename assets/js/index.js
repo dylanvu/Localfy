@@ -198,7 +198,7 @@
   $('form').on('submit', (event) => {
     event.preventDefault();
 
-    const searchQuery = $('#location').val();
+    const searchQuery = $('#search').val();
 
     if (searchQuery.trim() === '') {
       return;
