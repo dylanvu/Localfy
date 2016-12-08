@@ -12,7 +12,7 @@
     const $source = $('<source>');
 
     $source.attr('src', url);
-    $source.attr('type', 'video/mpeg');
+    $source.attr('type', 'audio/mpeg');
     $audio.append($source);
 
     return $audio;
@@ -39,12 +39,16 @@
       const $cardContent = $('<div>').addClass('col-xs-6');
 
       $cardContent.append(`<h3>${concert.artist.name}</h3>`);
-      $cardContent.append(wireUpAudioPlayer(concert.track.preview));
+
+      const $audio = wireUpAudioPlayer(concert.track.preview);
+
+      $cardContent.append($audio);
 
       const $concertDetails = $('<ul>').addClass('list-unstyled');
 
       $concertDetails.append(`<li>${concert.date}</li>`);
-      $concertDetails.append(`<li>${concert.venue.name}, ${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
+      $concertDetails.append(
+        `<li>${concert.venue.name}, ${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
       );
       $concertDetails.append(`<li><a href="${concert.url}">Buy Tickets</li>`);
 
@@ -56,10 +60,14 @@
       $img.attr('src', concert.artist.image);
       $cardImg.append($img);
 
-      const $card = $('<div>').addClass('row card');
+      const $row = $('<div>').addClass('row');
 
-      $card.append($cardContent);
-      $card.append($cardImg);
+      $row.append($cardContent);
+      $row.append($cardImg);
+
+      const $card = $('<div>').addClass('card');
+
+      $card.append($row);
 
       $('#concerts').append($card);
     }
@@ -109,6 +117,7 @@
         };
       }
 
+      console.log(concert.track.preview);
       concerts.push(concert);
       renderConcerts();
     });
