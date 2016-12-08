@@ -5,7 +5,7 @@
 
   const wireUpAudioPlayer = function(url) {
     if (url === null) {
-      return '<p>preview not available</p>';
+      return;
     }
 
     const $audio = $('<audio controls>');
@@ -19,9 +19,9 @@
   };
 
   const renderConcerts = function() {
-    // Sort dates ascending
+    // Sort dates in ascending order
     concerts.sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
+      return a.date - b.date;
     });
 
     $('#concerts').empty();
@@ -117,7 +117,6 @@
         };
       }
 
-      console.log(concert.track.preview);
       concerts.push(concert);
       renderConcerts();
     });
@@ -181,14 +180,16 @@
       for (const result of data) {
         let concertDate = new Date(result.datetime);
 
-        // Do nothing for concerts not happening today
-        if (currentDate.getDate() !== concertDate.getDate()) {
-          continue;
-        }
-
         // Adjust UTC to local time
         const offset = concertDate.getTimezoneOffset() * 60 * 1000;
         concertDate = new Date(concertDate.getTime() + offset);
+
+        // Do nothing for concerts not happening today
+        if (currentDate.getHours() - 1 > concertDate.getHours()) {
+          continue;
+        }
+
+        console.log(concertDate);
 
         // Create concert objects
         const concert = {

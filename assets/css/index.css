@@ -17,36 +17,50 @@ h1 {
 form input {
 	background-color: #F0F0F0;
 	border: none;
-	border-left: 2px solid #FFF;
+	border-radius: .25rem;
+	border: 2px solid #F0F0F0;
 	font-size: 16px;
 	padding: 10px;
 	width: 100%;
-	transition: background 2s, border-left 2s;
+	transition: background-color 2s, border 2s;
 }
 
 form input:focus {
-	background: #FFF;
-	border-left: 2px solid #00F28F;
+	background-color: #FFF;
+	border: 2px solid #00F28F;
 	outline: none;
 }
 
 button.btn {
-	background: transparent;
-	border: none;
-	color: #00F28F;
+	background: #00F28F;
+	border: 2px solid #00F28F;
+	color: #FFF;
 	cursor: pointer;
 	font-size: 16px;
-	padding: 10px 14px;
+	padding: 12px;
 	outline: none;
   width: 100%;
 }
 
 button.btn:hover {
-	background: #00F28F;
-	color: #FFF;
+	background: #FFF;
+	border: 2px solid #00F28F;
+	color: #00F28F;
 	transition: background 2s, color 2s;
 }
 
 button:focus{
 	outline: 0 !important;
+}
+
+.card {
+	max-height: 400px;
+}
+
+audio {
+	width: 200px;
+}
+
+.artistImage {
+	max-height: 200px;
 }
