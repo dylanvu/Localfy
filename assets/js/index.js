@@ -19,10 +19,15 @@
   };
 
   const renderConcerts = function() {
+    // Sort dates ascending
+    concerts.sort((a, b) => {
+      return new Date(a.date) - new Date(b.date);
+    });
+
     $('#concerts').empty();
 
     if (concerts.length === 0) {
-      const $h3 = $('<h3>Enter your city to find concerts near you!</h3>');
+      const $h3 = $('<h3>Enter your city to find bands playing near you</h3>');
 
       $h3.addClass('text-center');
       $('#concerts').append($h3);
@@ -31,31 +36,32 @@
     }
 
     for (const concert of concerts) {
-      const $row = $('<div>').addClass('row');
-      const $cardDiv = $('<div>').addClass('card');
-      const $cardContent = $('<div>').addClass('col-xs-8 col-md-offset-1');
-      const $cardImg = $('<div>').addClass('col-xs-4 col-md-2');
-      const $img = $('<img>').addClass('img-responsive artistImage');
+      const $cardContent = $('<div>').addClass('col-xs-6');
 
       $cardContent.append(`<h3>${concert.artist.name}</h3>`);
       $cardContent.append(wireUpAudioPlayer(concert.track.preview));
-      $cardContent.append(`<p>${concert.date}</p>`);
-      $cardContent.append(`<p>${concert.venue.name}</p>`);
-      $cardContent.append(
-        `<p>${concert.venue.city},
-        ${concert.venue.state},
-        ${concert.venue.country}</p>`
+
+      const $concertDetails = $('<ul>').addClass('list-unstyled');
+
+      $concertDetails.append(`<li>${concert.date}</li>`);
+      $concertDetails.append(`<li>${concert.venue.name}, ${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
       );
-      $cardContent.append(`<p><a href="${concert.url}">Buy Tickets</p>`);
-      $cardDiv.append($cardContent);
+      $concertDetails.append(`<li><a href="${concert.url}">Buy Tickets</li>`);
+
+      $cardContent.append($concertDetails);
+
+      const $cardImg = $('<div>').addClass('col-xs-6');
+      const $img = $('<img>').addClass('img-fluid artistImage');
 
       $img.attr('src', concert.artist.image);
       $cardImg.append($img);
-      $cardDiv.append($cardImg);
 
-      $row.append($cardDiv);
+      const $card = $('<div>').addClass('row card');
 
-      $('#concerts').append($row);
+      $card.append($cardContent);
+      $card.append($cardImg);
+
+      $('#concerts').append($card);
     }
   };
 
@@ -164,12 +170,18 @@
       const currentDate = new Date();
 
       for (const result of data) {
-        const concertDate = new Date(result.datetime);
+        let concertDate = new Date(result.datetime);
 
+        // Do nothing for concerts not happening today
         if (currentDate.getDate() !== concertDate.getDate()) {
           continue;
         }
 
+        // Adjust UTC to local time
+        const offset = concertDate.getTimezoneOffset() * 60 * 1000;
+        concertDate = new Date(concertDate.getTime() + offset);
+
+        // Create concert objects
         const concert = {
           url: result.url,
           date: concertDate,
