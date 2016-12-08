@@ -7,13 +7,74 @@
 
   const concerts = [];
 
-  const renderConcerts = function(arr) {
-    console.log(arr);
+  const wireUpAudioPlayer = function(url) {
+    if (url === null) {
+      return '<p>preview not available</p>';
+    }
+
+    const $audio = $('<audio controls>').addClass('responsive-video');
+    const $source = $('<source>');
+
+    $source.attr('src', url);
+    $source.attr('type', 'video/mpeg');
+    $audio.append($source);
+
+    return $audio;
   };
+
+  const renderConcerts = function() {
+    $('#concerts').empty();
+
+    if (concerts.length === 0) {
+      const $h3 = $('<h3>Enter your city to find concerts near you!</h3>');
+
+      $h3.addClass('valign center-align');
+      $('#concerts').append($h3);
+
+      return;
+    }
+
+    for (const concert of concerts) {
+      const $row = $('<div>').addClass('row');
+      const $col = $('<div>').addClass('col s12');
+      const $cardDiv = $('<div>').addClass('card horizontal');
+      const $cardImg = $('<div>').addClass('card-image');
+      const $cardContent = $('<div>').addClass('card-content');
+      const $img = $('<img>').addClass('artistImage');
+
+      $img.attr('src', concert.artist.image);
+      $cardImg.append($img);
+      $cardDiv.append($cardImg);
+
+      $cardContent.append(`<h5>${concert.artist.name}</h5>`);
+      $cardContent.append(wireUpAudioPlayer(concert.track.preview));
+      $cardContent.append(`<p>${concert.date}</p>`);
+      $cardContent.append(`<p>${concert.venue.name}</p>`);
+      $cardContent.append(
+        `<p>${concert.venue.city},
+        ${concert.venue.state},
+        ${concert.venue.country}</p>`
+      );
+      $cardContent.append(`<p><a href="${concert.url}">Buy Tickets</p>`);
+      $cardDiv.append($cardContent);
+
+      $col.append($cardDiv);
+      $row.append($col);
+
+      $('#concerts').append($row);
+    }
+  };
+
+  renderConcerts();
 
   const getArtistTopTrack = function(concert) {
     if (concert.artist.id === null) {
-      concert.track = null;
+      concert.track = {
+        artist: null,
+        album: null,
+        trackName: null,
+        preview: null
+      };
       concerts.push(concert);
 
       return;
@@ -31,7 +92,12 @@
       }
 
       if (data.tracks.length === 0) {
-        concert.track = null;
+        concert.track = {
+          artist: null,
+          album: null,
+          trackName: null,
+          preview: null
+        };
       }
       else {
         concert.track = {
@@ -43,6 +109,7 @@
       }
 
       concerts.push(concert);
+      renderConcerts();
     });
 
     $xhr.fail((err) => {
@@ -64,13 +131,15 @@
 
       if (data.artists.items.length === 0) {
         concert.artist.id = null;
-        concert.artist.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+        concert.artist.url = null;
+        concert.artist.image = 'http://www.freeiconspng.com/uploads/profile-icon-9.png';
       }
       else {
         concert.artist.id = data.artists.items[0].id;
+        concert.artist.url = data.artists.items[0].external_urls.spotify;
 
         if (data.artists.items[0].images.length === 0) {
-          concert.artist.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/300px-No_image_available.svg.png';
+          concert.artist.image = 'http://www.freeiconspng.com/uploads/profile-icon-9.png';
         }
         else {
           concert.artist.image = data.artists.items[0].images[0].url;
@@ -88,7 +157,7 @@
   const getConcerts = function(city) {
     const $xhr = $.ajax({
       method: 'GET',
-      url: `https://cors-anywhere.herokuapp.com/http://api.bandsintown.com/events/search.json?api_version=2.0&app_id=Local&location=${city}&radius=10`,
+      url: `https://cors-anywhere.herokuapp.com/http://api.bandsintown.com/events/search.json?api_version=2.0&app_id=Localfy&location=${city}&radius=10`,
       dataType: 'json'
     });
 
@@ -102,9 +171,9 @@
       for (const result of data) {
         const concertDate = new Date(result.datetime);
 
-        if (currentDate.getDate() !== concertDate.getDate()) {
-          continue;
-        }
+        // if (currentDate.getDate() !== concertDate.getDate()) {
+        //   continue;
+        // }
 
         const concert = {
           url: result.url,
@@ -123,7 +192,6 @@
         getArtistInfo(concert);
       }
 
-      renderConcerts(concerts);
       concerts.length = 0;
     });
 
