@@ -4,72 +4,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Localfy</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/index.css" rel="stylesheet">
-    <script defer src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script defer src="assets/js/jquery-3.1.1.min.js"></script>
     <script defer src="assets/js/index.js"></script>
   </head>
   <body>
-    <header>
+    <header class="header">
       <nav>
-        <div class="nav-wrapper grey darken-4">
-          <a href="#!" class="brand-logo">Localfy</a>
-          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-          <ul class="right hide-on-med-and-down">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Bookmarks</a></li>
-          </ul>
-          <ul class="side-nav" id="mobile-demo">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Bookmarks</a></li>
-          </ul>
-        </div>
+  			<div class="container">
+  				<div class="row">
+  					<div class="col-xs-12 col-md-offset-1">
+  						<h1>Localfy.</h1>
+  					</div>
+  				</div>
+  			</div>
       </nav>
-    </header>
+		</header>
 
-    <main>
-      <div class="row">
-        <form class="col s12">
-          <div class="row">
-            <div class="input-field col m5 offset-m3 col s10">
-              <input placeholder="Enter your city" id="location" type="text" class="validate">
-            </div>
+    <main class="main">
+			<div class="container">
+				<div class="row">
+					<form class="form">
+						<div class="col-xs-8 col-md-8 col-md-offset-1">
+							<input id="location" type="text" placeholder="enter your city" class="validate"></input>
+						</div>
+						<div class="col-xs-4 col-md-2">
+							<button type="submit" class="btn">search</button>
+						</div>
+					</form>
+				</div>
+			</div>
 
-            <div class="input-field col m1 col s2">
-              <button class="waves-effect waves-light btn-flat" type="submit" name="action">
-                <i class="material-icons right">send</i>
-              </button>
-          </div>
-        </form>
+      <div id="concerts" class="container">
       </div>
-
-      <div id="concerts">
-      </div>
-    </main>
-
-    <footer class="page-footer grey darken-4">
-      <div class="container">
-        <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text">Localfy</h5>
-            <p class="grey-text text-lighten-4">
-              Powered by:
-                <a href="https://developer.spotify.com/">Spotify</a>,
-                <a href="https://www.bandsintown.com/api/overview">Bandsintown</a>
-            </p>
-            <p class="grey-text text-lighten-3">
-              See the code: <a href="https://github.com/dylanvu/localfy">github</a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        <div class="container">
-          © 2016 Localfy
-        </div>
-      </div>
-    </footer>
+		</main>
   </body>
 </html>

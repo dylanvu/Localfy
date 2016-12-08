@@ -1,17 +1,57 @@
-body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
-
-main {
-  flex: 1 0 auto;
-  /*max-width: 720px;*/
-  margin: 0 auto;
+html, body {
+	font-family: 'Montserrat', sans-serif;
 }
 
-.card-image {
-  height: 200px;
-  width: 200px;
-  overflow: hidden;
+h1 {
+	border-left: 2px solid #00F28F;
+	font-size: 48px;
+	font-weight: 400;
+	padding-left: 10px;
+}
+
+form input {
+	background-color: #F0F0F0;
+	border: none;
+	border-left: 2px solid #FFF;
+	font-size: 16px;
+	padding: 10px;
+	width: 100%;
+	transition: background 2s, border-left 2s;
+}
+
+form input:focus {
+	background: #FFF;
+	border-left: 2px solid #00F28F;
+	outline: none;
+}
+
+button.btn {
+	background: transparent;
+	border: none;
+	color: #00F28F;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 10px 14px;
+	outline: none;
+  width: 100%;
+}
+
+button.btn:hover {
+	background: #00F28F;
+	color: #FFF;
+	transition: background 2s, color 2s;
+}
+
+button:focus{
+	outline: 0 !important;
+}
+
+.card {
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #c7c7c7
+}
+
+.artistImage {
+  margin-top: 20px;
 }

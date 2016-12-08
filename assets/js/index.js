@@ -1,10 +1,6 @@
 (function() {
   'use strict';
 
-  $('.button-collapse').sideNav();
-
-  // $('select').material_select();
-
   const concerts = [];
 
   const wireUpAudioPlayer = function(url) {
@@ -12,7 +8,7 @@
       return '<p>preview not available</p>';
     }
 
-    const $audio = $('<audio controls>').addClass('responsive-video');
+    const $audio = $('<audio controls>');
     const $source = $('<source>');
 
     $source.attr('src', url);
@@ -28,7 +24,7 @@
     if (concerts.length === 0) {
       const $h3 = $('<h3>Enter your city to find concerts near you!</h3>');
 
-      $h3.addClass('valign center-align');
+      $h3.addClass('text-center');
       $('#concerts').append($h3);
 
       return;
@@ -36,17 +32,12 @@
 
     for (const concert of concerts) {
       const $row = $('<div>').addClass('row');
-      const $col = $('<div>').addClass('col s12');
-      const $cardDiv = $('<div>').addClass('card horizontal');
-      const $cardImg = $('<div>').addClass('card-image');
-      const $cardContent = $('<div>').addClass('card-content');
-      const $img = $('<img>').addClass('artistImage');
+      const $cardDiv = $('<div>').addClass('card');
+      const $cardContent = $('<div>').addClass('col-xs-8 col-md-offset-1');
+      const $cardImg = $('<div>').addClass('col-xs-4 col-md-2');
+      const $img = $('<img>').addClass('img-responsive artistImage');
 
-      $img.attr('src', concert.artist.image);
-      $cardImg.append($img);
-      $cardDiv.append($cardImg);
-
-      $cardContent.append(`<h5>${concert.artist.name}</h5>`);
+      $cardContent.append(`<h3>${concert.artist.name}</h3>`);
       $cardContent.append(wireUpAudioPlayer(concert.track.preview));
       $cardContent.append(`<p>${concert.date}</p>`);
       $cardContent.append(`<p>${concert.venue.name}</p>`);
@@ -58,8 +49,11 @@
       $cardContent.append(`<p><a href="${concert.url}">Buy Tickets</p>`);
       $cardDiv.append($cardContent);
 
-      $col.append($cardDiv);
-      $row.append($col);
+      $img.attr('src', concert.artist.image);
+      $cardImg.append($img);
+      $cardDiv.append($cardImg);
+
+      $row.append($cardDiv);
 
       $('#concerts').append($row);
     }
@@ -75,6 +69,7 @@
         trackName: null,
         preview: null
       };
+
       concerts.push(concert);
 
       return;
@@ -171,9 +166,9 @@
       for (const result of data) {
         const concertDate = new Date(result.datetime);
 
-        // if (currentDate.getDate() !== concertDate.getDate()) {
-        //   continue;
-        // }
+        if (currentDate.getDate() !== concertDate.getDate()) {
+          continue;
+        }
 
         const concert = {
           url: result.url,
