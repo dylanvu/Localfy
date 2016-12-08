@@ -6,4 +6,12 @@ body {
 
 main {
   flex: 1 0 auto;
+  /*max-width: 720px;*/
+  margin: 0 auto;
+}
+
+.card-image {
+  height: 200px;
+  width: 200px;
+  overflow: hidden;
 }
