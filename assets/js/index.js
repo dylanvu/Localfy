@@ -82,21 +82,23 @@
     for (const concert of concerts) {
       const $cardBlock = $('<div>').addClass('card-block');
       const $h3 = $('<h3>').addClass('card-title');
+      const $a = $('<a>').attr('href', concert.artist.url);
 
-      $h3.append(concert.artist.name);
+      $a.append(concert.artist.name);
+      $h3.append($a);
       $cardBlock.append($h3);
 
       $cardBlock.append(setUpAudioElement(concert.track.preview));
 
       $cardBlock.append(setUpCardContent(concert));
 
-      const $cardBlockCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
+      const $cardBlockCol = $('<div>').addClass('col-xs-12 flex-sm-first flex-xs-last col-sm-6 col-md-6');
 
       $cardBlockCol.append($cardBlock);
 
       const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
       const $cardImg = $('<img>').addClass(
-        'img-fluid rounded float-xs-right card-img-bottom'
+        'img-fluid float-xs-right'
       );
 
       $cardImg.attr('src', concert.artist.image);
@@ -183,17 +185,17 @@
       if (data.artists.items.length === 0) {
         concert.artist.id = null;
         concert.artist.url = null;
-        concert.artist.image = './assets/images/avatar.png';
+        concert.artist.image = './assets/images/avatar.jpg';
       }
       else {
         concert.artist.id = data.artists.items[0].id;
         concert.artist.url = data.artists.items[0].external_urls.spotify;
 
         if (data.artists.items[0].images.length === 0) {
-          concert.artist.image = './assets/images/avatar.png';
+          concert.artist.image = './assets/images/avatar.jpg';
         }
         else {
-          concert.artist.image = data.artists.items[0].images[1].url;
+          concert.artist.image = data.artists.items[0].images[0].url;
         }
       }
 
@@ -228,9 +230,7 @@
         concertDate = new Date(concertDate.getTime() + offset);
 
         // Check for concerts that have already passed
-        if (currentDate.getHours() > concertDate.getHours() ||
-          currentDate.getDate() < concertDate.getDate()
-        ) {
+        if (currentDate.getTime() > concertDate.getTime()) {
           continue;
         }
 

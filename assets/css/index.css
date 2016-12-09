@@ -10,7 +10,6 @@ header {
 h1 {
 	border-left: 2px solid #00F28F;
 	font-size: 48px;
-	font-weight: 400;
 	padding: 10px;
 }
 
@@ -58,12 +57,7 @@ audio {
 	width: 200px;
 }
 
-a.home {
+.home {
 	color: inherit;
 	text-decoration: none;
-}
-
-img.artistImage {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
 }
