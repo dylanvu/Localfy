@@ -3,7 +3,7 @@
 
   const concerts = [];
 
-  const wireUpAudioPlayer = function(url) {
+  const setUpAudioElement = function(url) {
     if (url === null) {
       return;
     }
@@ -18,16 +18,58 @@
     return $audio;
   };
 
+  // Dollar sign?
+  const setUpCardContent = function(concert) {
+    const $concertDetails = $('<ul>').addClass('card-text list-unstyled');
+
+    const date = concert.date.toString().split(' ');
+    const day = date[0];
+    const month = date[1];
+    const dayNum = date[2];
+    const year = date[3];
+    let min = concert.date.getMinutes();
+    let hour = concert.date.getHours();
+    let ext;
+
+    if (min < 10) {
+      min = `0${min}`;
+    }
+
+    if (hour > 12) {
+      hour = hour - 12;
+      hour = hour.length < 10 ? `0${hour}` : hour;
+      ext = 'PM'
+    } else {
+      ext = 'AM'
+    }
+
+    $concertDetails.append(
+      `<li>${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}</li>`
+    );
+    $concertDetails.append(`<li>${concert.venue.name}</li>`);
+    $concertDetails.append(
+      `<li>${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
+    );
+    $concertDetails.append(
+      `<li><a href="${concert.url}">Buy Tickets</a></li>`
+    );
+
+    return $concertDetails;
+  };
+
   const renderConcerts = function() {
     // Sort dates in ascending order
     concerts.sort((a, b) => {
       return a.date - b.date;
     });
 
+    console.log(concerts.length)
+
     $('#concerts').empty();
 
     if (concerts.length === 0) {
-      const $h3 = $('<h3>Enter your city to find bands playing near you</h3>');
+      const $h3 = $('<h3>').addClass('intro');
+      $h3.text('Enter your city to find bands playing near you');
 
       $h3.addClass('text-center');
       $('#concerts').append($h3);
@@ -36,41 +78,24 @@
     }
 
     for (const concert of concerts) {
-      const $cardBlockCol = $('<div>').addClass('col-xs-6');
+      const $cardBlockCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
       const $cardBlock = $('<div>').addClass('card-block');
       const $h3 = $('<h3>').addClass('card-title');
 
       $h3.append(concert.artist.name);
       $cardBlock.append($h3);
 
-      const $audio = wireUpAudioPlayer(concert.track.preview);
+      $cardBlock.append(setUpAudioElement(concert.track.preview));
 
-      $cardBlock.append($audio);
-
-      const $concertDetails = $('<ul>').addClass(
-        'card-text list-unstyled'
-      );
-
-      $concertDetails.append(`<li>${concert.date}</li>`);
-      $concertDetails.append(`<li>${concert.venue.name}</li>`);
-      $concertDetails.append(
-        `<li>${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
-      );
-      $concertDetails.append(
-        `<li><a href="${concert.url}">Buy Tickets</a>/</li>`
-      );
-
-      $cardBlock.append($concertDetails);
+      $cardBlock.append(setUpCardContent(concert));
       $cardBlockCol.append($cardBlock);
 
-      const $cardImgCol = $('<div>').addClass('col-xs-6');
-      const $cardImg = $('<div>').addClass('card-img-bottom');
+      const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
+      const $cardImg = $('<img>').addClass(
+        'img-fluid rounded float-xs-right card-img-bottom'
+      );
 
-      $cardImg.css({
-        'height': '15rem',
-        'background': `url(${concert.artist.image}) center no-repeat`,
-        'background-size': 'cover'
-      });
+      $cardImg.attr('src', concert.artist.image);
       $cardImgCol.append($cardImg);
 
       const $row = $('<div>').addClass('row');
@@ -197,8 +222,10 @@
         const offset = concertDate.getTimezoneOffset() * 60 * 1000;
         concertDate = new Date(concertDate.getTime() + offset);
 
-        // Do nothing for concerts not happening today
-        if (currentDate.getHours() - 1 > concertDate.getHours()) {
+        // Check for concerts that have already passed
+        if (currentDate.getHours() > concertDate.getHours() ||
+          currentDate.getDate() < concertDate.getDate()
+        ) {
           continue;
         }
 
