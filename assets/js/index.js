@@ -33,14 +33,15 @@
     }
 
     if (hour > 12) {
-      hour = hour - 12;
+      hour -= 12;
       hour = hour.length < 10 ? `0${hour}` : hour;
-      ext = 'PM'
-    } else {
-      ext = 'AM'
+      ext = 'PM';
+    }
+    else {
+      ext = 'AM';
     }
 
-    return `${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}`
+    return `${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}`;
   };
 
   // Dollar sign?
@@ -65,12 +66,11 @@
       return a.date - b.date;
     });
 
-    console.log(concerts.length)
-
     $('#concerts').empty();
 
     if (concerts.length === 0) {
       const $h3 = $('<h3>').addClass('intro');
+
       $h3.text('Enter your city to find bands playing near you');
 
       $h3.addClass('text-center');
@@ -91,7 +91,7 @@
       $cardBlock.append(setUpCardContent(concert));
 
       const $cardBlockCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
-      
+
       $cardBlockCol.append($cardBlock);
 
       const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
@@ -224,6 +224,7 @@
 
         // Adjust UTC to local time
         const offset = concertDate.getTimezoneOffset() * 60 * 1000;
+
         concertDate = new Date(concertDate.getTime() + offset);
 
         // Check for concerts that have already passed

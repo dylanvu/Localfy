@@ -58,7 +58,12 @@ audio {
 	width: 200px;
 }
 
-.artistImage {
+a.home {
+	color: inherit;
+	text-decoration: none;
+}
+
+img.artistImage {
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 }
