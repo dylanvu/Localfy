@@ -16,12 +16,13 @@ h1 {
 
 form input {
 	background-color: #F0F0F0;
+	border: none;
 	border-radius: .25rem;
 	border: 2px solid #F0F0F0;
 	font-size: 16px;
 	padding: 10px;
 	width: 100%;
-	transition: background-color 2s, border 2s;
+	transition: background-color 1s, border 1s;
 }
 
 form input:focus {
@@ -46,7 +47,7 @@ button.btn:hover {
 	background: #FFF;
 	border: 2px solid #00F28F;
 	color: #00F28F;
-	transition: background 2s, color 2s;
+	transition: background 1s, color 1s;
 }
 
 button:focus{
