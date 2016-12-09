@@ -53,14 +53,11 @@ button:focus{
 	outline: 0 !important;
 }
 
-.card {
-	max-height: 400px;
-}
-
 audio {
 	width: 200px;
 }
 
 .artistImage {
-	max-height: 200px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }

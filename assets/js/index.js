@@ -36,34 +36,47 @@
     }
 
     for (const concert of concerts) {
-      const $cardContent = $('<div>').addClass('col-xs-6');
+      const $cardBlockCol = $('<div>').addClass('col-xs-6');
+      const $cardBlock = $('<div>').addClass('card-block');
+      const $h3 = $('<h3>').addClass('card-title');
 
-      $cardContent.append(`<h3>${concert.artist.name}</h3>`);
+      $h3.append(concert.artist.name);
+      $cardBlock.append($h3);
 
       const $audio = wireUpAudioPlayer(concert.track.preview);
 
-      $cardContent.append($audio);
+      $cardBlock.append($audio);
 
-      const $concertDetails = $('<ul>').addClass('list-unstyled');
+      const $concertDetails = $('<ul>').addClass(
+        'card-text list-unstyled'
+      );
 
       $concertDetails.append(`<li>${concert.date}</li>`);
+      $concertDetails.append(`<li>${concert.venue.name}</li>`);
       $concertDetails.append(
-        `<li>${concert.venue.name}, ${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
+        `<li>${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
       );
-      $concertDetails.append(`<li><a href="${concert.url}">Buy Tickets</li>`);
+      $concertDetails.append(
+        `<li><a href="${concert.url}">Buy Tickets</a>/</li>`
+      );
 
-      $cardContent.append($concertDetails);
+      $cardBlock.append($concertDetails);
+      $cardBlockCol.append($cardBlock);
 
-      const $cardImg = $('<div>').addClass('col-xs-6');
-      const $img = $('<img>').addClass('img-fluid artistImage');
+      const $cardImgCol = $('<div>').addClass('col-xs-6');
+      const $cardImg = $('<div>').addClass('card-img-bottom');
 
-      $img.attr('src', concert.artist.image);
-      $cardImg.append($img);
+      $cardImg.css({
+        'height': '15rem',
+        'background': `url(${concert.artist.image}) center no-repeat`,
+        'background-size': 'cover'
+      });
+      $cardImgCol.append($cardImg);
 
       const $row = $('<div>').addClass('row');
 
-      $row.append($cardContent);
-      $row.append($cardImg);
+      $row.append($cardBlockCol);
+      $row.append($cardImgCol);
 
       const $card = $('<div>').addClass('card');
 
@@ -141,17 +154,17 @@
       if (data.artists.items.length === 0) {
         concert.artist.id = null;
         concert.artist.url = null;
-        concert.artist.image = 'http://www.freeiconspng.com/uploads/profile-icon-9.png';
+        concert.artist.image = './assets/images/avatar.png';
       }
       else {
         concert.artist.id = data.artists.items[0].id;
         concert.artist.url = data.artists.items[0].external_urls.spotify;
 
         if (data.artists.items[0].images.length === 0) {
-          concert.artist.image = 'http://www.freeiconspng.com/uploads/profile-icon-9.png';
+          concert.artist.image = './assets/images/avatar.png';
         }
         else {
-          concert.artist.image = data.artists.items[0].images[0].url;
+          concert.artist.image = data.artists.items[0].images[1].url;
         }
       }
 
@@ -188,8 +201,6 @@
         if (currentDate.getHours() - 1 > concertDate.getHours()) {
           continue;
         }
-
-        console.log(concertDate);
 
         // Create concert objects
         const concert = {
