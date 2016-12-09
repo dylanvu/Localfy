@@ -27,6 +27,7 @@ form input {
 form input:focus {
 	background-color: #FFF;
 	border: 2px solid #00F28F;
+	box-shadow: none;
 	outline: none;
 }
 

@@ -18,17 +18,14 @@
     return $audio;
   };
 
-  // Dollar sign?
-  const setUpCardContent = function(concert) {
-    const $concertDetails = $('<ul>').addClass('card-text list-unstyled');
-
-    const date = concert.date.toString().split(' ');
-    const day = date[0];
-    const month = date[1];
-    const dayNum = date[2];
-    const year = date[3];
-    let min = concert.date.getMinutes();
-    let hour = concert.date.getHours();
+  const formatDate = function(date) {
+    const dateArr = date.toString().split(' ');
+    const day = dateArr[0];
+    const month = dateArr[1];
+    const dayNum = dateArr[2];
+    const year = dateArr[3];
+    let min = date.getMinutes();
+    let hour = date.getHours();
     let ext;
 
     if (min < 10) {
@@ -43,9 +40,14 @@
       ext = 'AM'
     }
 
-    $concertDetails.append(
-      `<li>${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}</li>`
-    );
+    return `${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}`
+  };
+
+  // Dollar sign?
+  const setUpCardContent = function(concert) {
+    const $concertDetails = $('<ul>').addClass('card-text list-unstyled');
+
+    $concertDetails.append(formatDate(concert.date));
     $concertDetails.append(`<li>${concert.venue.name}</li>`);
     $concertDetails.append(
       `<li>${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
@@ -78,7 +80,6 @@
     }
 
     for (const concert of concerts) {
-      const $cardBlockCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
       const $cardBlock = $('<div>').addClass('card-block');
       const $h3 = $('<h3>').addClass('card-title');
 
@@ -88,6 +89,9 @@
       $cardBlock.append(setUpAudioElement(concert.track.preview));
 
       $cardBlock.append(setUpCardContent(concert));
+
+      const $cardBlockCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
+      
       $cardBlockCol.append($cardBlock);
 
       const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
