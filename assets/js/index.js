@@ -3,21 +3,6 @@
 
   const concerts = [];
 
-  const setUpAudioElement = function(url) {
-    if (url === null) {
-      return;
-    }
-
-    const $audio = $('<audio controls>');
-    const $source = $('<source>');
-
-    $source.attr('src', url);
-    $source.attr('type', 'audio/mpeg');
-    $audio.append($source);
-
-    return $audio;
-  };
-
   const formatDate = function(date) {
     const dateArr = date.toString().split(' ');
     const day = dateArr[0];
@@ -88,8 +73,6 @@
       $h3.append($a);
       $cardBlock.append($h3);
 
-      $cardBlock.append(setUpAudioElement(concert.track.preview));
-
       $cardBlock.append(setUpCardContent(concert));
 
       const $cardBlockCol = $('<div>').addClass('col-xs-12 flex-sm-first flex-xs-last col-sm-6 col-md-6');
@@ -98,10 +81,13 @@
 
       const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
       const $cardImg = $('<img>').addClass(
-        'img-fluid float-xs-right'
+        'img-fluid float-xs-right artistImage'
       );
 
-      $cardImg.attr('src', concert.artist.image);
+      $cardImg.attr({
+        'src': concert.artist.image,
+        'data-artist-id': concert.artist.id
+      });
       $cardImgCol.append($cardImg);
 
       const $row = $('<div>').addClass('row');
@@ -119,23 +105,14 @@
 
   renderConcerts();
 
-  const getArtistTopTrack = function(concert) {
-    if (concert.artist.id === null) {
-      concert.track = {
-        artist: null,
-        album: null,
-        trackName: null,
-        preview: null
-      };
-
-      concerts.push(concert);
-
+  const getArtistTrack = function(id) {
+    if (id === null) {
       return;
     }
 
     const $xhr = $.ajax({
       method: 'GET',
-      url: `https://api.spotify.com/v1/artists/${concert.artist.id}/top-tracks?country=US`,
+      url: `https://api.spotify.com/v1/artists/${id}/top-tracks?country=US`,
       dataType: 'json'
     });
 
@@ -145,24 +122,10 @@
       }
 
       if (data.tracks.length === 0) {
-        concert.track = {
-          artist: null,
-          album: null,
-          trackName: null,
-          preview: null
-        };
-      }
-      else {
-        concert.track = {
-          artist: data.tracks[0].artists[0].name,
-          album: data.tracks[0].album.name,
-          trackName: data.tracks[0].name,
-          preview: data.tracks[0].preview_url
-        };
+        return;
       }
 
-      concerts.push(concert);
-      renderConcerts();
+      return data.tracks[0].preview_url;
     });
 
     $xhr.fail((err) => {
@@ -199,7 +162,8 @@
         }
       }
 
-      getArtistTopTrack(concert);
+      concerts.push(concert);
+      renderConcerts();
     });
 
     $xhr.fail((err) => {
@@ -270,5 +234,15 @@
     }
 
     getConcerts(searchQuery);
+  });
+
+  $('#concerts').on('click', '.artistImage', (event) => {
+    const $target = $(event.target)
+    const id = $target.attr('data-artist-id');
+    if (id !== null) {
+      const audioObject = new Audio(getArtistTrack(id));
+      console.log(getArtistTrack(id));
+      audioObject.play();
+    }
   });
 })();
