@@ -125,7 +125,8 @@
         return;
       }
 
-      return data.tracks[0].preview_url;
+      const audio = new Audio(data.tracks[0].preview_url);
+      console.log(audio);
     });
 
     $xhr.fail((err) => {
@@ -240,8 +241,8 @@
     const $target = $(event.target)
     const id = $target.attr('data-artist-id');
     if (id !== null) {
-      const audioObject = new Audio(getArtistTrack(id));
-      console.log(getArtistTrack(id));
+      const audioObject = getArtistTrack(id);
+      console.log(audioObject);
       audioObject.play();
     }
   });
