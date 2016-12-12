@@ -73,7 +73,7 @@
     if (concerts.length === 0) {
       const $h3 = $('<h3>');
 
-      $h3.text('Find amazing local bands playing near you.');
+      $h3.text('Find amazing bands playing near you.');
       $('#concerts').append($h3);
 
       return;
@@ -95,7 +95,7 @@
       $cardBlock.append(setUpCardContent(concert));
 
       const $cardBlockCol = $('<div>').addClass(
-        'col-xs-12 flex-sm-first flex-xs-last col-sm-6 col-md-6'
+        'col-xs-12 col-sm-6 col-md-7 col-lg-8 flex-sm-first'
       );
 
       $cardBlockCol.append($cardBlock);
@@ -106,7 +106,9 @@
 
       $cardImg.attr('src', concert.artist.image);
 
-      const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
+      const $cardImgCol = $('<div>').addClass(
+        'col-xs-12 col-sm-6 col-md-5 col-lg-4 flex-xs-first'
+      );
 
       $cardImgCol.append($cardImg);
 
