@@ -1,4 +1,4 @@
-# Localfy
+# [Localfy](http://localfy.surge.sh)
 Localfy is a simple web application for music fans who are tired of switching between apps to view concert listings and hear samples of an artist's music. 
 
 ### Features
