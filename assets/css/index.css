@@ -25,12 +25,6 @@ header {
   padding-bottom: 10px;
 }
 
-h1 {
-	border-left: 2px solid #00F28F;
-	font-size: 48px;
-	padding: 10px;
-}
-
 form {
 	padding: 15px;
 }
@@ -77,6 +71,12 @@ button:focus{
 
 audio {
 	width: 200px;
+}
+
+.title {
+	border-left: 2px solid #00F28F;
+	font-size: 48px;
+	padding: 10px;
 }
 
 .home {
