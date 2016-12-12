@@ -31,6 +31,10 @@ h1 {
 	padding: 10px;
 }
 
+form {
+	padding: 15px;
+}
+
 form input {
 	background-color: #F0F0F0;
 	border: none;
@@ -88,8 +92,4 @@ audio {
   height: 40px;
   line-height: 20px;
   background-color: #FFF;
-}
-
-.form {
-	padding: 10px;
 }

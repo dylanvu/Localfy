@@ -47,7 +47,6 @@
     return `${day} ${dayNum} ${month} ${year} @${hour}:${min}${ext}`;
   };
 
-  // Dollar sign?
   const setUpCardContent = function(concert) {
     const $concertDetails = $('<ul>').addClass('card-text list-unstyled');
 
@@ -81,19 +80,23 @@
     }
 
     for (const concert of concerts) {
-      const $cardBlock = $('<div>').addClass('card-block');
       const $h3 = $('<h3>').addClass('card-title');
       const $a = $('<a>').attr('href', concert.artist.url);
 
       $a.append(concert.artist.name);
       $h3.append($a);
+
+      const $cardBlock = $('<div>').addClass('card-block');
+
       $cardBlock.append($h3);
 
       $cardBlock.append(setUpAudioElement(concert.track.preview));
 
       $cardBlock.append(setUpCardContent(concert));
 
-      const $cardBlockCol = $('<div>').addClass('col-xs-12 flex-sm-first flex-xs-last col-sm-6 col-md-6');
+      const $cardBlockCol = $('<div>').addClass(
+        'col-xs-12 flex-sm-first flex-xs-last col-sm-6 col-md-6'
+      );
 
       $cardBlockCol.append($cardBlock);
 
@@ -183,19 +186,20 @@
         return;
       }
 
+      // Check for artists in results
       if (data.artists.items.length === 0) {
         return;
       }
-      else {
-        concert.artist.id = data.artists.items[0].id;
-        concert.artist.url = data.artists.items[0].external_urls.spotify;
 
-        if (data.artists.items[0].images.length === 0) {
-          concert.artist.image = './assets/images/avatar.jpg';
-        }
-        else {
-          concert.artist.image = data.artists.items[0].images[0].url;
-        }
+      concert.artist.id = data.artists.items[0].id;
+      concert.artist.url = data.artists.items[0].external_urls.spotify;
+
+      // Add generic avatar if artist does not have an image
+      if (data.artists.items[0].images.length === 0) {
+        concert.artist.image = './assets/images/avatar.jpg';
+      }
+      else {
+        concert.artist.image = data.artists.items[0].images[0].url;
       }
 
       getArtistTopTrack(concert);
