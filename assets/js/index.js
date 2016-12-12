@@ -34,8 +34,11 @@
 
     if (hour > 12) {
       hour -= 12;
-      hour = hour.length < 10 ? `0${hour}` : hour;
       ext = 'PM';
+      if (hour === 0) {
+        hour = 12;
+        ext = 'AM';
+      }
     }
     else {
       ext = 'AM';
@@ -69,11 +72,9 @@
     $('#concerts').empty();
 
     if (concerts.length === 0) {
-      const $h3 = $('<h3>').addClass('intro');
+      const $h3 = $('<h3>');
 
-      $h3.text('Enter your city to find bands playing near you');
-
-      $h3.addClass('text-center');
+      $h3.text('Find amazing local bands playing near you.');
       $('#concerts').append($h3);
 
       return;
@@ -96,12 +97,14 @@
 
       $cardBlockCol.append($cardBlock);
 
-      const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
       const $cardImg = $('<img>').addClass(
         'img-fluid float-xs-right'
       );
 
       $cardImg.attr('src', concert.artist.image);
+
+      const $cardImgCol = $('<div>').addClass('col-xs-12 col-sm-6 col-md-6');
+
       $cardImgCol.append($cardImg);
 
       const $row = $('<div>').addClass('row');
@@ -116,8 +119,6 @@
       $('#concerts').append($card);
     }
   };
-
-  renderConcerts();
 
   const getArtistTopTrack = function(concert) {
     if (concert.artist.id === null) {
@@ -183,9 +184,7 @@
       }
 
       if (data.artists.items.length === 0) {
-        concert.artist.id = null;
-        concert.artist.url = null;
-        concert.artist.image = './assets/images/avatar.jpg';
+        return;
       }
       else {
         concert.artist.id = data.artists.items[0].id;
@@ -225,9 +224,9 @@
         let concertDate = new Date(result.datetime);
 
         // Adjust UTC to local time
-        const offset = concertDate.getTimezoneOffset() * 60 * 1000;
+        const offsetInMs = concertDate.getTimezoneOffset() * 60 * 1000;
 
-        concertDate = new Date(concertDate.getTime() + offset);
+        concertDate = new Date(concertDate.getTime() + offsetInMs);
 
         // Check for concerts that have already passed
         if (currentDate.getTime() > concertDate.getTime()) {
@@ -259,6 +258,8 @@
       console.log(err);
     });
   };
+
+  renderConcerts();
 
   $('form').on('submit', (event) => {
     event.preventDefault();
