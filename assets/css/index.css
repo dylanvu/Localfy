@@ -89,3 +89,7 @@ audio {
   line-height: 20px;
   background-color: #FFF;
 }
+
+.form {
+	padding: 10px;
+}
