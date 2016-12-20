@@ -3,12 +3,12 @@ html, body {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
 }
 
 a {
@@ -21,8 +21,8 @@ a:hover {
 }
 
 header {
-  padding-top: 10px;
-  padding-bottom: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 form {
@@ -55,7 +55,7 @@ button.btn {
 	font-size: 16px;
 	padding: 12px;
 	outline: none;
-  width: 100%;
+	width: 100%;
 }
 
 button.btn:hover {
@@ -85,11 +85,11 @@ audio {
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 40px;
-  line-height: 20px;
-  background-color: #FFF;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 40px;
+	line-height: 20px;
+	background-color: #FFF;
 }
