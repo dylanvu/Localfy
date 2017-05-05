@@ -56,7 +56,7 @@
       `<li>${concert.venue.city}, ${concert.venue.state}, ${concert.venue.country}</li>`
     );
     $concertDetails.append(
-      `<li><a href="${concert.url}">Buy Tickets</a></li>`
+      `<li><a href="${concert.url}" target="_blank">Buy Tickets</a></li>`
     );
 
     return $concertDetails;
@@ -82,6 +82,7 @@
     for (const concert of concerts) {
       const $h3 = $('<h3>').addClass('card-title');
       const $a = $('<a>').attr('href', concert.artist.url);
+      $a.attr('target', '_blank');
 
       $a.append(concert.artist.name);
       $h3.append($a);
